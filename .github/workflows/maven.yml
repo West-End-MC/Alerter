@@ -21,9 +21,9 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-  
+
     - name: Upload SNAPSHOT JAR to Release
-      uses: actions/create-release@main
+      uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -31,8 +31,8 @@ jobs:
         release_name: Release ${{ github.run_number }}
         draft: false
         prerelease: false
-    - name: Upload JAR to Release
-      uses: actions/upload-artifact@main
-      with:
-        name: Alerter
-        path: /home/runner/work/alerter/alerter/target/*SNAPSHOT.jar
+      - name: Upload JAR to Release
+        uses: actions/upload-artifact@v2
+        with:
+          name: Alerter
+          path: /home/runner/work/alerter/alerter/target/*SNAPSHOT.jar
