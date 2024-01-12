@@ -29,3 +29,8 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+      
+    - uses: actions/upload-artifact@main
+      with:
+          name: Alerter
+          path: /home/runner/work/alerter/alerter/target/*SNAPSHOT.jar
