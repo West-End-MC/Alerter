@@ -25,16 +25,16 @@ jobs:
     - name: Find correct JAR
       id: find-jar
       run: |
-        ls -lah
+        ls -lah target/
         output="$(find target/ ! -name "original-*" -type f -printf "%f\n")"
         echo "::set-output name=jarname::$output"
 
-    - name: Upload to the GitHub release
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Release the build
+      if: ${{ github.event_name == 'push' }}
+      uses: ncipollo/release-action@v1
       with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: plugin/build/libs/${{ steps.find-jar.outputs.jarname }}
-        asset_name: ${{ steps.find-jar.outputs.jarname }}
-        asset_content_type: application/java-archive
+        artifacts: target/${{ steps.find-jar.outputs.jarname }}
+        body: ${{ join(github.event.commits.*.message, '\n') }}
+        prerelease: true
+        name: Dev-build ${{ steps.git-version.outputs.id }}
+        tag: dev-build
