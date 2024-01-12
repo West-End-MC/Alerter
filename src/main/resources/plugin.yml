@@ -1,0 +1,6 @@
+name: Alerter
+version: '${project.version}'
+main: alerter.Alerter
+api-version: 1.20
+authors: [ Solarpepper ]
+description: This plugin alerting in Tg chat
