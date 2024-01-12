@@ -35,4 +35,5 @@ jobs:
       with:
         files: target/${{ steps.find-jar.outputs.jarname }}
         body: ${{ join(github.event.commits.*.message, '\n') }}
-        tag_name: v${{ github.run_number }}
+        tag_name: ${{ github.ref_slug }}
+        token: ${{ secrets.GITHUB_TOKEN }}
