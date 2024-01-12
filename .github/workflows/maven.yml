@@ -34,6 +34,6 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: target/${{ steps.find-jar.outputs.jarname }}
+        tag_name: v${{ github.run_number }}
         body: ${{ join(github.event.commits.*.message, '\n') }}
-        tag_name: ${{ github.ref_slug }}
         token: ${{ secrets.GITHUB_TOKEN }}
