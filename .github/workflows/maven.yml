@@ -34,6 +34,6 @@ jobs:
       if: ${{ github.event_name == 'push' }}
       uses: softprops/action-gh-release@v1
       with:
-        files: target/${{ steps.find-jar.outputs.jarname }}
+        files: target/Alerter-1.1-SNAPSHOT.jar
         body: ${{ join(github.event.commits.*.message, '\n') }}
         tag: v${{ github.run_number }}
