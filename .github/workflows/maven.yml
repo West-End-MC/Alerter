@@ -21,7 +21,7 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-
+  
     - name: Upload SNAPSHOT JAR to Release
       uses: actions/create-release@v1
       env:
