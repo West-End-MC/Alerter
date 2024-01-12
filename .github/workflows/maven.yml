@@ -26,7 +26,7 @@ jobs:
       id: find-jar
       run: |
         ls -lah target/
-        output="$(find target/ ! -name "original-*" -type f -printf "%f\n")"
+        output="$(find target/ -name ".^Alerter-*.jar" -type f -printf "%f\n")"
         echo "::set-output name=jarname::$output"
 
     - name: Release the build
