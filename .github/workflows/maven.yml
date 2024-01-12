@@ -3,8 +3,6 @@ name: Java CI with Maven
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   build:
@@ -26,15 +24,13 @@ jobs:
       id: find-jar
       run: |
         ls -lah target/
-        output="$(find target/ -name ".^Alerter-*.jar" -type f -printf "%f\n")"
+        output="$(find target/ -name "Alerter-*.jar" -type f -printf "%f\n")"
         echo "::set-output name=jarname::$output"
 
     - name: Release the build
       if: ${{ github.event_name == 'push' }}
-      uses: ncipollo/release-action@v1
+      uses: softprops/action-gh-release@v1
       with:
-        artifacts: target/${{ steps.find-jar.outputs.jarname }}
+        files: target/${{ steps.find-jar.outputs.jarname }}
         body: ${{ join(github.event.commits.*.message, '\n') }}
-        prerelease: true
-        name: Dev-build ${{ steps.git-version.outputs.id }}
-        tag: dev-build
+        tag: v${{ github.run_number }}
