@@ -2,10 +2,9 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main, dev" ]
-  pull_request:
-    branches: [ "main" ]
-  
+    branches:
+      - main
+      - dev
 
 jobs:
   build:
@@ -27,13 +26,13 @@ jobs:
       id: find-jar
       run: |
         ls -lah target/
-        output="$(find target/ -name "Alerter-*.jar" -type f -printf "%f\n")"
+        output="$(find target/ -name "Alerter-*.jar" -type f -printf "%f\n" | grep -E '^Alerter-1.1-SNAPSHOT.jar$')"
         echo "::set-output name=jarname::$output"
 
     - name: Release the build
       if: ${{ github.event_name == 'push' }}
       uses: softprops/action-gh-release@v1
       with:
-        files: target/Alerter-1.1-SNAPSHOT.jar
+        files: target/${{ steps.find-jar.outputs.jarname }}
         body: ${{ join(github.event.commits.*.message, '\n') }}
         tag: v${{ github.run_number }}
