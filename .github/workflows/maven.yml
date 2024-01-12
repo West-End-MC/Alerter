@@ -1,18 +1,11 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
-
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
 name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main, dev" ]
   pull_request:
     branches: [ "main" ]
+  
 
 jobs:
   build:
@@ -29,8 +22,18 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-      
-    - uses: actions/upload-artifact@main
+
+    - name: Find correct JAR
+      id: find-jar
+      run: |
+        ls -lah target/
+        output="$(find target/ -name "Alerter-*.jar" -type f -printf "%f\n")"
+        echo "::set-output name=jarname::$output"
+
+    - name: Release the build
+      if: ${{ github.event_name == 'push' }}
+      uses: softprops/action-gh-release@v1
       with:
-          name: Alerter
-          path: /home/runner/work/alerter/alerter/target/*SNAPSHOT.jar
+        files: target/${{ steps.find-jar.outputs.jarname }}
+        body: ${{ join(github.event.commits.*.message, '\n') }}
+        tag: v${{ github.run_number }}
