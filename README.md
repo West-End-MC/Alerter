@@ -1,7 +1,9 @@
 # Alerter - Minecraft Plugin
+Alerts in to Telegram
 
 ## Description
 Alerter is a lightweight and customizable Minecraft plugin designed to enhance server functionality. It allows server admins to set up real-time alerts and notifications within the Minecraft environment, improving communication and interaction.
+
 
 ## Features
 - Customizable alert messages.
